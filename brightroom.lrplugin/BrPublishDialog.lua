@@ -25,7 +25,7 @@ local function validateProperties(propertyTable)
 	setError(propertyTable, nil)
 
 	if propertyTable.ftpPreset == nil then
-		setError(propertyTable, LOC "$$$/FtpUpload/ExportDialog/Messages/SelectPreset=Select or Create an FTP preset")
+		setError(propertyTable, LOC "$$$/Brightroom/ExportDialog/Messages/SelectPreset=Select or Create an FTP preset")
 		return
 	end
 

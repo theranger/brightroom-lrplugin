@@ -12,7 +12,7 @@ local function connect(ftpPreset)
 
 	local instance = LrFtp.create(ftpPreset)
 	if not instance then
-		LrErrors.throwUserError( LOC "$$$/FtpUpload/Upload/Errors/InvalidFtpParameters=The specified FTP preset is incomplete and cannot be used." )
+		LrErrors.throwUserError( LOC "$$$/Brightroom/Upload/Errors/InvalidFtpParameters=The specified FTP preset is incomplete and cannot be used." )
 	end
 
 end
