@@ -13,6 +13,10 @@ return {
 	hidePrintResolution = true,
 	canExportVideo = false,
 
+	exportPresetFields = {
+		{ key = "ftpPreset", default = nil },
+	},
+
 	sectionsForTopOfDialog = BrPublishDialog.sectionsForTopOfDialog,
 	startDialog = BrPublishDialog.startDialog,
 	processRenderedPhotos = BrUploadTask.processRenderedPhotos,
