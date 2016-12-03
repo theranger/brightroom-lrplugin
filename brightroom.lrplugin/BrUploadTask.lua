@@ -5,6 +5,7 @@
 local LrLogger = import "LrLogger"("Brightroom")
 --LrLogger:enable("logfile")
 
+local LrFileUtils = import "LrFileUtils"
 local LrPathUtils = import "LrPathUtils"
 local LrErrors = import "LrErrors"
 local LrFtp = import "LrFtp"
@@ -63,13 +64,11 @@ local function createTree(instance, path)
 	until index == nil
 end
 
-local function uploadPhoto(instance, photoPath)
+local function uploadPhoto(instance, photoPath, remoteName)
 	if not instance then return false end
 	if not photoPath then return false end
 
-	local filename = LrPathUtils.leafName(photoPath)
-	local success = instance:putFile(photoPath, filename)
-
+	local success = instance:putFile(photoPath, remoteName)
 	return success
 end
 
@@ -105,7 +104,12 @@ function BrUploadTask.processRenderedPhotos(functionContext, exportContext)
 		if progress:isCanceled() then break end
 
 		if success then
-			uploadPhoto(instance, pathOrMessage)
+			local filename = LrPathUtils.leafName(pathOrMessage)
+
+			if uploadPhoto(instance, pathOrMessage, filename) then
+				LrFileUtils.delete(pathOrMessage)
+				rendition:recordPublishedPhotoId(instance.path .. "/" .. filename)
+			end
 		end
 	end
 
