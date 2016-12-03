@@ -4,7 +4,7 @@
 # This file is not mandatory and might not be needed in every setup.
 
 # Show all files in directory listing.
-# Lihgtoom's LrFTP component cannot handle hidden files without this,
+# Lightroom's LrFTP component cannot handle hidden files without this,
 # but gallery creates ".cache" folder to store cached thumbnails by default
 # Without this setting, deleting published collection from Lightroom fails.
 ListOptions -a
