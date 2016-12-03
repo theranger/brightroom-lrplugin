@@ -20,4 +20,5 @@ return {
 	sectionsForTopOfDialog = BrPublishDialog.sectionsForTopOfDialog,
 	startDialog = BrPublishDialog.startDialog,
 	processRenderedPhotos = BrUploadTask.processRenderedPhotos,
+	deletePhotosFromPublishedCollection = BrUploadTask.deletePhotosFromPublishedCollection,
 }

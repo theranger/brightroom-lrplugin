@@ -72,6 +72,13 @@ local function uploadPhoto(instance, photoPath, remoteName)
 	return success
 end
 
+local function deletePhoto(instance, photoPath)
+	if not instance then return end
+	if not photoPath then return end
+
+	instance:removeFile(photoPath)
+end
+
 function BrUploadTask.processRenderedPhotos(functionContext, exportContext)
 	local exportSettings = assert(exportContext.propertyTable)
 	local exportSession = exportContext.exportSession
@@ -114,4 +121,14 @@ function BrUploadTask.processRenderedPhotos(functionContext, exportContext)
 	end
 
 	instance:disconnect()
+end
+
+function BrUploadTask.deletePhotosFromPublishedCollection(publishSettings, arrayOfPhotoIds, deletedCallback, localCollectionId)
+	local instance = connect(publishSettings.ftpPreset)
+	if instance == nil then return end
+
+	for _, photoID in ipairs(arrayOfPhotoIds) do
+		deletePhoto(instance, photoID)
+		deletedCallback(photoID)
+	end
 end
