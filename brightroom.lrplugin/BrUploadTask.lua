@@ -133,3 +133,11 @@ function BrUploadTask.deletePhotosFromPublishedCollection(publishSettings, array
 		deletedCallback(photoID)
 	end
 end
+
+function BrUploadTask.renamePublishedCollection(publishSettings, info)
+	LrErrors.throwUserError(LOC "$$$/Brightroom/Upload/Errors/FtpRenameUnsupported=Renaming collections is unsupported by FTP provider.")
+end
+
+function BrUploadTask.reparentPublishedCollection(publishSettings, info)
+	LrErrors.throwUserError(LOC "$$$/Brightroom/Upload/Errors/FtpMoveUnsupported=Moving collections is unsupported by FTP provider.")
+end

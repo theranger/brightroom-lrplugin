@@ -21,4 +21,6 @@ return {
 	startDialog = BrPublishDialog.startDialog,
 	processRenderedPhotos = BrUploadTask.processRenderedPhotos,
 	deletePhotosFromPublishedCollection = BrUploadTask.deletePhotosFromPublishedCollection,
+	renamePublishedCollection = BrUploadTask.renamePublishedCollection,
+	reparentPublishedCollection = BrUploadTask.reparentPublishedCollection,
 }
