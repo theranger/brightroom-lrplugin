@@ -52,7 +52,7 @@ local function changeDirectory(instance, path)
 	if not path then return end
 
 	createDirectory(instance, path)
-	instance.path = instance.path .. "/" .. path
+	instance.path = LrFtp.appendFtpPaths(instance.path, path)
 end
 
 local function createTree(instance, path)
@@ -114,8 +114,9 @@ function BrUploadTask.processRenderedPhotos(functionContext, exportContext)
 			local filename = LrPathUtils.leafName(pathOrMessage)
 
 			if uploadPhoto(instance, pathOrMessage, filename) then
+				local remotePath = LrFtp.appendFtpPaths(instance.path, filename)
 				LrFileUtils.delete(pathOrMessage)
-				rendition:recordPublishedPhotoId(instance.path .. "/" .. filename)
+				rendition:recordPublishedPhotoId(remotePath)
 			end
 		end
 	end
