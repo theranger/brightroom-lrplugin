@@ -23,4 +23,5 @@ return {
 	deletePhotosFromPublishedCollection = BrUploadTask.deletePhotosFromPublishedCollection,
 	renamePublishedCollection = BrUploadTask.renamePublishedCollection,
 	reparentPublishedCollection = BrUploadTask.reparentPublishedCollection,
+	deletePublishedCollection = BrUploadTask.deletePublishedCollection,
 }

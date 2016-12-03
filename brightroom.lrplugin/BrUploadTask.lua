@@ -3,7 +3,7 @@
 --
 
 local LrLogger = import "LrLogger"("Brightroom")
---LrLogger:enable("logfile")
+LrLogger:enable("logfile")
 
 local LrFileUtils = import "LrFileUtils"
 local LrPathUtils = import "LrPathUtils"
@@ -79,6 +79,25 @@ local function deletePhoto(instance, photoPath)
 	instance:removeFile(photoPath)
 end
 
+local function deleteCollection(instance, path)
+	if path == "." or path == ".." then return end
+
+	local originalPath = instance.path
+	instance.path = LrFtp.appendFtpPaths(instance.path, path)
+
+	local entry = instance:exists("")
+	if entry == false then return end
+
+	local contents = instance:getContents("/")
+	for type, token in string.gmatch(contents, "(.).-:%d%d%s(.-)%c") do
+		if type == "d" then deleteCollection(instance, token) end
+		if type == "-" then instance:removeFile(token) end
+	end
+
+	instance.path = originalPath
+	instance:removeDirectory(path)
+end
+
 function BrUploadTask.processRenderedPhotos(functionContext, exportContext)
 	local exportSettings = assert(exportContext.propertyTable)
 	local exportSession = exportContext.exportSession
@@ -103,6 +122,7 @@ function BrUploadTask.processRenderedPhotos(functionContext, exportContext)
 	end
 
 	changeDirectory(instance, collectionInfo.name)
+	exportSession:recordRemoteCollectionId(instance.path)
 
 	for i, rendition in exportContext:renditions{ stopIfCanceled = true } do
 		progress:setPortionComplete(i / count)
@@ -140,4 +160,11 @@ end
 
 function BrUploadTask.reparentPublishedCollection(publishSettings, info)
 	LrErrors.throwUserError(LOC "$$$/Brightroom/Upload/Errors/FtpMoveUnsupported=Moving collections is unsupported by FTP provider.")
+end
+
+function BrUploadTask.deletePublishedCollection(publishSettings, info)
+	local instance = connect(publishSettings.ftpPreset)
+	if instance == nil then return end
+
+	deleteCollection(instance, info.remoteId)
 end
