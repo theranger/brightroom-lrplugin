@@ -75,9 +75,17 @@ end
 
 function BrUploadTask.processRenderedPhotos(functionContext, exportContext)
 	local exportSettings = assert(exportContext.propertyTable)
+	local exportSession = exportContext.exportSession
 
 	local instance = connect(exportSettings.ftpPreset)
 	if instance == nil then return end
+
+	local count = exportSession:countRenditions()
+	local progress = exportContext:configureProgress {
+		title = count > 1
+				and LOC("$$$/Brightroom/Publish/Progress=Publishing ^1 photos to Brightroom", count)
+				or LOC "$$$/Brightroom/Publish/Progress/One=Publishing one photo to Brightroom",
+	}
 
 	if exportSettings.fullPath then
 		createTree(instance, exportSettings.fullPath)
@@ -91,7 +99,10 @@ function BrUploadTask.processRenderedPhotos(functionContext, exportContext)
 	changeDirectory(instance, collectionInfo.name)
 
 	for i, rendition in exportContext:renditions{ stopIfCanceled = true } do
+		progress:setPortionComplete(i / count)
+
 		local success, pathOrMessage = rendition:waitForRender()
+		if progress:isCanceled() then break end
 
 		if success then
 			uploadPhoto(instance, pathOrMessage)
