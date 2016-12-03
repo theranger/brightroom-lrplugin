@@ -3,7 +3,7 @@
 --
 
 local LrLogger = import "LrLogger"("Brightroom")
-LrLogger:enable("logfile")
+--LrLogger:enable("logfile")
 
 local LrFileUtils = import "LrFileUtils"
 local LrPathUtils = import "LrPathUtils"
